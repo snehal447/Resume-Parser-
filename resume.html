@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Parser and Job Recommendation AI Based System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f3f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: 28px; /* slightly smaller to fit longer text */
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        form {
+            padding: 30px;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #1cc88a, #36b9cc);
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .message {
+            color: #e74a3b;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .result {
+            padding: 30px;
+            border-top: 1px solid #e3e6f0;
+        }
+
+        .result h2 {
+            background-color: #f8f9fc;
+            color: #4e73df;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .result p {
+            font-size: 16px;
+            margin: 8px 0;
+            color: #2c3e50;
+        }
+
+        .skills, .education {
+            margin: 8px 0;
+            padding-left: 25px;
+        }
+
+        .skills li, .education li {
+            margin-bottom: 6px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Resume Parser and Job Recommendation AI Based System</div>
+
+        <form action="/pred" method="post" enctype="multipart/form-data">
+            <input type="file" name="resume" accept=".pdf,.txt" required>
+            <br>
+            <input type="submit" value="Upload & Analyze">
+        </form>
+
+        {% if message %}
+            <p class="message">{{ message }}</p>
+        {% endif %}
+
+        {% if predicted_category %}
+        <div class="result">
+            <h2>Results</h2>
+            <p><strong>Category:</strong> {{ predicted_category }}</p>
+            <p><strong>Recommended Job:</strong> {{ recommended_job }}</p>
+            <p><strong>Name:</strong> {{ name }}</p>
+            <p><strong>Phone:</strong> {{ phone }}</p>
+            <p><strong>Email:</strong> {{ email }}</p>
+
+            <p><strong>Skills:</strong></p>
+            <ul class="skills">
+                {% for skill in extracted_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+
+            <p><strong>Education:</strong></p>
+            <ul class="education">
+                {% for edu in extracted_education %}
+                    <li>{{ edu }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
