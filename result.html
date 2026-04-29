@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Analysis Result</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:950px;
+    margin:auto;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+    overflow:hidden;
+}
+
+.header{
+    background:linear-gradient(135deg,#4e73df,#1cc88a);
+    color:white;
+    text-align:center;
+    padding:30px;
+    font-size:28px;
+    font-weight:bold;
+}
+
+.content{
+    padding:30px;
+}
+
+.card{
+    background:#f8f9fc;
+    border-left:6px solid #4e73df;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.card h2{
+    color:#4e73df;
+    margin-bottom:15px;
+}
+
+.card p{
+    margin:8px 0;
+    font-size:16px;
+}
+
+ul{
+    padding-left:20px;
+}
+
+ul li{
+    margin-bottom:8px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 25px;
+    background:linear-gradient(135deg,#1cc88a,#36b9cc);
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    transform:scale(1.05);
+}
+
+@media(max-width:768px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        📊 Resume Analysis Dashboard
+    </div>
+
+    <div class="content">
+
+        <div class="grid">
+
+            <div class="card">
+                <h2>👤 Personal Details</h2>
+                <p><strong>Name:</strong> {{ name }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Phone:</strong> {{ phone }}</p>
+            </div>
+
+            <div class="card">
+                <h2>💼 Prediction Result</h2>
+                <p><strong>Category:</strong> {{ predicted_category }}</p>
+                <p><strong>Recommended Job:</strong> {{ recommended_job }}</p>
+            </div>
+
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <h2>🛠 Extracted Skills</h2>
+                <ul>
+                    {% for skill in extracted_skills %}
+                    <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🎓 Education</h2>
+                <ul>
+                    {% for edu in extracted_education %}
+                    <li>{{ edu }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+        <a href="/" class="back-btn">⬅ Upload Another Resume</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+<script>
+    function showLoader(){
+        document.getElementById("loading").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
