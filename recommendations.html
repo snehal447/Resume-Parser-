@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AI Job Recommendations</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(
+rgba(10,15,35,0.95),
+rgba(10,15,35,0.98)
+),
+url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+min-height:100vh;
+color:white;
+}
+
+.navbar{
+
+background:rgba(255,255,255,0.04);
+backdrop-filter:blur(15px);
+
+padding:18px 40px;
+
+border-bottom:
+1px solid rgba(255,255,255,0.08);
+}
+
+.navbar-brand{
+
+font-size:28px;
+font-weight:800;
+color:#38bdf8 !important;
+}
+
+.page-wrapper{
+
+max-width:1400px;
+margin:auto;
+padding:40px 20px;
+}
+
+.header-card{
+
+background:rgba(255,255,255,0.04);
+
+border-radius:24px;
+
+padding:30px;
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+backdrop-filter:blur(15px);
+
+margin-bottom:40px;
+}
+
+.header-title{
+
+font-size:36px;
+font-weight:800;
+color:#38bdf8;
+}
+
+.header-subtitle{
+
+color:#94a3b8;
+margin-top:8px;
+}
+
+.profile-card{
+
+background:
+rgba(255,255,255,0.05);
+
+border-radius:24px;
+
+padding:30px;
+
+margin-bottom:40px;
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+backdrop-filter:blur(18px);
+
+box-shadow:
+0 20px 50px rgba(0,0,0,0.3);
+}
+
+.candidate-name{
+
+font-size:28px;
+font-weight:800;
+color:white;
+}
+
+.role-badge{
+
+background:
+rgba(56,189,248,0.15);
+
+border:
+1px solid rgba(56,189,248,0.3);
+
+color:#38bdf8;
+
+padding:8px 16px;
+
+border-radius:30px;
+
+font-size:13px;
+font-weight:700;
+}
+
+.skills-section{
+
+margin-top:20px;
+}
+
+.skill-badge{
+
+background:
+rgba(16,185,129,0.15);
+
+border:
+1px solid rgba(16,185,129,0.3);
+
+color:#10b981;
+
+padding:6px 12px;
+
+border-radius:30px;
+
+font-size:12px;
+font-weight:600;
+
+display:inline-block;
+
+margin:4px;
+}
+
+.job-card{
+
+height:100%;
+
+background:
+rgba(255,255,255,0.05);
+
+border-radius:20px;
+
+padding:22px;
+
+border:
+1px solid rgba(255,255,255,0.08);
+
+transition:.3s;
+}
+
+.job-card:hover{
+
+transform:translateY(-5px);
+
+border-color:#38bdf8;
+
+box-shadow:
+0 10px 30px rgba(56,189,248,0.15);
+}
+
+.company-logo{
+
+width:60px;
+height:60px;
+
+background:white;
+
+padding:10px;
+
+border-radius:12px;
+
+object-fit:contain;
+}
+
+.job-title{
+
+font-size:18px;
+font-weight:700;
+color:white;
+}
+
+.company-name{
+
+font-size:14px;
+color:#38bdf8;
+}
+
+.match-badge{
+
+background:#16a34a;
+color:white;
+
+padding:5px 12px;
+
+border-radius:20px;
+
+font-size:12px;
+font-weight:700;
+}
+
+.job-type{
+
+background:#2563eb;
+color:white;
+
+padding:5px 12px;
+
+border-radius:20px;
+
+font-size:12px;
+font-weight:700;
+}
+
+.salary{
+
+font-size:18px;
+font-weight:700;
+color:#facc15;
+}
+
+.progress{
+
+height:8px;
+border-radius:20px;
+background:rgba(255,255,255,0.08);
+}
+
+.progress-bar{
+
+background:#22c55e;
+}
+
+.apply-btn{
+
+width:100%;
+
+background:#38bdf8;
+border:none;
+
+padding:10px;
+
+border-radius:10px;
+
+font-weight:700;
+color:white;
+
+text-decoration:none;
+display:block;
+text-align:center;
+}
+
+.apply-btn:hover{
+
+background:#0ea5e9;
+color:white;
+}
+
+.info-line{
+
+font-size:14px;
+color:#cbd5e1;
+margin-bottom:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+
+<div class="container-fluid">
+
+<a class="navbar-brand"
+href="{{ url_for('home') }}">
+
+AI Resume Analyzer
+
+</a>
+
+<div class="ms-auto">
+
+<a href="{{ url_for('view_results') }}"
+class="btn btn-outline-light">
+
+<i class="fas fa-arrow-left me-2"></i>
+
+Back To Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</nav>
+
+<div class="page-wrapper">
+
+<div class="header-card">
+
+<h1 class="header-title">
+
+<i class="fas fa-briefcase me-2"></i>
+
+AI Job Recommendations
+
+</h1>
+
+<p class="header-subtitle">
+
+Personalized opportunities based on ATS analysis,
+skills and career profile matching.
+
+</p>
+
+</div>
+
+{% for p in profiles %}
+
+<div class="profile-card">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap">
+
+<div>
+
+<div class="candidate-name">
+
+{{ p.candidate_name.upper() }}
+
+</div>
+
+<div class="text-secondary mt-2">
+
+Recommended Career Path
+
+</div>
+
+</div>
+
+<div>
+
+<span class="role-badge">
+
+{{ p.profile_name }}
+
+</span>
+
+</div>
+
+</div>
+
+<div class="skills-section">
+
+{% for skill in p.skills %}
+
+<span class="skill-badge">
+
+{{ skill }}
+
+</span>
+
+{% endfor %}
+
+</div>
+
+<div class="row mt-4 g-4">
+
+{% for job in p.jobs %}
+
+<div class="col-lg-4">
+
+<div class="job-card">
+
+<div class="d-flex align-items-center mb-3">
+
+<img
+src="{{ job.logo }}"
+class="company-logo">
+
+<div class="ms-3">
+
+<div class="job-title">
+
+{{ job.title }}
+
+</div>
+
+<div class="company-name">
+
+{{ job.company }}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="mb-3">
+
+<span class="match-badge">
+
+{{ job.match_score }}% Match
+
+</span>
+
+<span class="job-type">
+
+{{ job.job_type }}
+
+</span>
+
+</div>
+
+<div class="progress mb-3">
+
+<div class="progress-bar"
+style="width:{{ job.match_score }}%">
+</div>
+
+</div>
+
+<div class="info-line">
+
+<i class="fas fa-map-marker-alt me-2"></i>
+
+{{ job.location }}
+
+</div>
+
+<div class="info-line">
+
+<i class="fas fa-briefcase me-2"></i>
+
+{{ job.experience }}
+
+</div>
+
+<div class="salary mb-3">
+
+<i class="fas fa-wallet me-2"></i>
+
+{{ job.salary }}
+
+</div>
+
+<a href="{{ job.redirect_url }}"
+target="_blank"
+class="apply-btn">
+
+Apply Now
+
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+</html>
+```

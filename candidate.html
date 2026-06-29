@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Profile - {{ c.name }}</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * { font-family: 'Poppins', sans-serif; box-sizing: border-box; }
+        body {
+            background: linear-gradient(rgba(15,23,42,0.96), rgba(15,23,42,0.98)),
+            url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop');
+            background-size: cover; background-position: center; min-height: 100vh; color: white; padding-bottom: 60px;
+        }
+        .navbar { background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); padding: 18px 40px; }
+        .navbar-brand { font-size: 28px; font-weight: 700; color: #38bdf8 !important; }
+
+        .profile-container { max-width: 950px; margin: 50px auto; padding: 0 20px; }
+
+        /* Navigation Links Layout styling */
+        .back-btn { color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; transition: 0.2s; }
+        .back-btn:hover { color: #0ea5e9; text-shadow: 0 0 8px rgba(56,189,248,0.2); }
+
+        .home-jump-btn {
+            color: #94a3b8; text-decoration: none; font-weight: 600; font-size: 14px;
+            padding: 6px 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; transition: 0.2s;
+        }
+        .home-jump-btn:hover { color: white; background: rgba(255,255,255,0.05); border-color: white; }
+
+        /* Profile Sheet Base Card Layout */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px);
+            border-radius: 24px; padding: 40px; border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); margin-top: 20px;
+        }
+
+        /* Ultra Heavy Heading Weight for visibility */
+        .candidate-title { font-size: 38px; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
+        .candidate-subtitle { color: #38bdf8; font-weight: 600; text-transform: uppercase; font-size: 14px; letter-spacing: 1.5px; }
+
+        .info-label { color: #94a3b8; font-size: 13px; font-weight: 600; text-transform: uppercase; }
+        .info-val { color: #f8fafc; font-size: 16px; margin-bottom: 15px; }
+
+        .score-box {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px; padding: 20px; text-align: center;
+        }
+        .score-num { font-size: 42px; font-weight: 700; }
+
+        .badge-pill { display: inline-block; padding: 6px 14px; border-radius: 8px; font-size: 13px; margin: 4px; font-weight: 500; }
+        .bg-skill { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); }
+
+        /* Optimization Suggestions layout boxes */
+        .suggestion-box {
+            background: rgba(245, 158, 11, 0.04); border: 1px dashed rgba(245, 158, 11, 0.3);
+            border-radius: 16px; padding: 25px; margin-top: 35px;
+        }
+        .resume-preview {
+            background: #090d16; border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; color: #34d399; font-family: 'Courier New', Courier, monospace;
+            padding: 20px; white-space: pre-wrap; font-size: 13px; max-height: 400px; overflow-y: auto;
+        }
+        .copy-btn {
+            background: #f59e0b; border: none; color: white; padding: 8px 18px;
+            border-radius: 8px; font-weight: 600; font-size: 13px; transition: 0.2s;
+        }
+        .copy-btn:hover { background: #d97706; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home') }}">AI Resume Analyzer</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+
+        <!-- DUAL DYNAMIC BACKWARD TERMINAL SPLIT BUTTONS -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="{{ url_for('view_results') }}" class="back-btn">
+                <i class="fas fa-arrow-left me-2"></i>Back to Evaluation Terminal
+            </a>
+            <a href="{{ url_for('home') }}" class="home-jump-btn">
+                <i class="fas fa-home me-2"></i>New Scan / Change JD
+            </a>
+        </div>
+
+        <div class="profile-card">
+            <!-- IDENTITY MANAGEMENT TITLE HEADER -->
+            <div class="row align-items-center border-bottom pb-4 mb-4" style="border-color: rgba(255,255,255,0.1) !important;">
+                <div class="col-md-8">
+                    <div class="candidate-subtitle">Parsed Identity Records</div>
+                    <!-- Forced Maximum Weight Structural Layout -->
+                    <h1 class="candidate-title">{{ c.name.upper() }}</h1>
+                    <div class="text-info font-monospace mt-1"><i class="fas fa-briefcase me-2"></i>{{ c.category }}</div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <span class="fs-5 px-3 py-2 border rounded-pill fw-bold {% if c.status == 'Shortlisted' %}text-success border-success{% else %}text-danger border-danger{% endif %}">
+                        {{ c.status.upper() }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- PROFILE SCORING COMPARTMENTS -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <div class="score-box">
+                        <div class="info-label">ATS Match Matrix</div>
+                        <div class="score-num mt-2 {% if c.ats_score >= 70 %}text-success{% else %}text-warning{% endif %}">{{ c.ats_score }}</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="score-box">
+                        <div class="info-label">Keywords Identified</div>
+                        <div class="score-num text-info mt-2">{{ c.skills|length }}</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="score-box">
+                        <div class="info-label">Tracked Experience</div>
+                        <div class="score-num text-white mt-2" style="font-size: 28px; padding-top:12px;">{{ c.experience }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORE META-INFO FIELDS -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="info-label">Communications Route</div>
+                    <div class="info-val"><b>{{ c.email }}</b></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-label">Contact Endpoint</div>
+                    <div class="info-val"><b>{{ c.phone }}</b></div>
+                </div>
+                <div class="col-md-12">
+                    <div class="info-label">Education Profiles Located</div>
+                    <div class="info-val">
+                        {% if c.education %}
+                            {{ c.education|join(', ') }}
+                        {% else %}
+                            <span class="text-muted small">No verified academic certifications isolated.</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXTRACTED SKILLS BAG -->
+            <div class="mb-4">
+                <h5 class="text-white mb-3" style="font-weight: 600;">Extracted Knowledge Inventory</h5>
+                {% for skill in c.skills %}
+                    <span class="badge-pill bg-skill"><i class="fas fa-tag me-1"></i>{{ skill }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- TECHNICAL PREPARATION SECTION -->
+            <div class="mt-4 pt-3 border-top style-border" style="border-color: rgba(255,255,255,0.05) !important;">
+                <h5 class="text-white mb-3" style="font-weight: 600;"><i class="fas fa-question-circle me-2 text-warning"></i>Tailored Technical Screening Preparation</h5>
+                <ol class="list-group list-group-numbered transparent-list">
+                    {% for q in c.interview_questions %}
+                        <li class="list-group-item bg-transparent text-light border-0 px-0 py-2" style="font-size:14px; line-height: 1.6;">{{ q }}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+
+            <!-- AUTO-SUGGESTION RESUME ENHANCER OPTIMIZER CONTAINER -->
+            {% if c.ats_score < 70 %}
+            <div class="suggestion-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="text-warning m-0 font-weight-bold"><i class="fas fa-wand-magic-sparkles me-2"></i>AI System Update Recommendation</h5>
+                        <p class="text-muted small m-0 mt-1">This candidate fell short of index match triggers. Here is an optimized setup covering targeted keyword vectors.</p>
+                    </div>
+                    <button class="copy-btn" onclick="copyResumeText()"><i class="fas fa-copy me-1"></i>Copy Source</button>
+                </div>
+                <div class="resume-preview" id="resumeBox">{{ c.suggested_resume }}</div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+    <!-- JOB RECOMMENDATIONS SECTION -->
+<div class="mt-5 pt-4 border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+    <h5 class="text-white mb-4" style="font-weight: 600;">
+        <i class="fas fa-briefcase me-2 text-info"></i>Recommended Opportunities
+    </h5>
+
+    <div class="row g-4">
+        {% if jobs %}
+            {% for job in jobs %}
+            <div class="col-md-4">
+                <div class="card bg-transparent border border-secondary text-white h-100" style="border-radius: 15px;">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold text-info">{{ job.title }}</h6>
+                        <p class="card-text small mb-1">{{ job.company }}</p>
+                        <p class="card-text small text-muted"><i class="fas fa-map-marker-alt me-1"></i>{{ job.location }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="badge bg-secondary">{{ job.salary }}</span>
+                            <a href="{{ job.redirect_url }}" target="_blank" class="btn btn-sm btn-primary">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p class="text-muted">No specific job recommendations found for this profile at this time.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+    <!-- UTILITY SCRIPT FOR REUSABLE INTERACTIVE BUILD -->
+    <script>
+        function copyResumeText() {
+            const copyText = document.getElementById("resumeBox").innerText;
+            navigator.clipboard.writeText(copyText).then(() => {
+                const btn = document.querySelector(".copy-btn");
+                btn.innerHTML = '<i class="fas fa-check me-1"></i> Copied!';
+                btn.style.background = "#10b981";
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy me-1"></i> Copy Source';
+                    btn.style.background = "#f59e0b";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
